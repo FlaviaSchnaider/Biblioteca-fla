@@ -775,6 +775,7 @@ int main()
 				case 1: //cadastrar livro
 					do {
 						system("cls");
+						set_color(5);
 						cout << "\n\tPreencha os dados abaixo: " << endl;
 						set_color(7);
 
@@ -813,6 +814,7 @@ int main()
 				case 2: //cadastrar revistas
 					do {
 						system("cls");
+						set_color(5);
 						cout << "\n\tPreencha os dados abaixo: " << endl;
 						set_color(7);
 						cont_revistas++;
@@ -849,8 +851,9 @@ int main()
 				case 3: //cadastrar autor
 					do {
 						system("cls");
-						cout << "\nLista atual de autores cadastrados: \n" << endl;
 						set_color(5);
+						cout << "\nLista atual de autores cadastrados: \n" << endl;
+						set_color(7);
 
 						for (int i = 0; i < cont_autor; i++) {
 							cout << "\t[" << i + 1 << "] ";
@@ -860,8 +863,9 @@ int main()
 
 						cont_autor++;
 						cin.ignore();
-						set_color(7);
+						set_color(5);
 						cout << "\nPreencha os dados abaixo: \n" << endl;
+						set_color(7);
 						lista_autores[cont_autor] = ler_autor();
 
 						set_color(2);
@@ -878,8 +882,9 @@ int main()
 				case 4: //cadastrar editora
 					do {
 						system("cls");
-						cout << "\nLista atual de editoras cadastradas: \n" << endl;
 						set_color(5);
+						cout << "\nLista atual de editoras cadastradas: \n" << endl;
+						set_color(7);
 
 						for (int i = 0; i < cont_autor; i++) {
 							cout << "\t[" << i + 1 << "] ";
@@ -889,10 +894,11 @@ int main()
 
 						cont_editora++;
 						cin.ignore();
-						set_color(7);
+						set_color(5);
 						cout << "\nPreencha os dados abaixo: \n" << endl;
-						lista_editoras[cont_editora] = ler_editora();
+						set_color(7);
 
+						lista_editoras[cont_editora] = ler_editora();
 						set_color(2);
 						cout << "\n\tEditora cadastrada com sucesso!" << endl;
 						set_color(7);
@@ -946,14 +952,19 @@ int main()
 
 				case 1://alterar livro
 					system("cls");
-					cout << "\nLivros cadastrados atualmente (id e titulo): \n" << endl;
 					set_color(5);
+					cout << "\nLivros cadastrados atualmente (id e titulo): \n" << endl;
+					set_color(7);
+
 					for (int i = 0; i < cont_livros + 1; i++) {
 						cout << "\t[" << i + 1 << "] ";
 						cout << lista_livros[i].titulo << " (" << lista_livros[i].id << ")\n";
 					}
 					set_color(7);
+					set_color(5);
 					cout << "\n\nEscolha a opcao que deseja alterar: ";
+					set_color(7);
+
 					cin >> escolha;
 
 					usuario.id = lista_livros[escolha - 1].id;
@@ -984,14 +995,16 @@ int main()
 
 				case 2:
 					system("cls");
-					cout << "\nRevistas cadastrados atualmente (id e titulo): \n" << endl;
 					set_color(5);
+					cout << "\nRevistas cadastrados atualmente (id e titulo): \n" << endl;
+					set_color(7);
 					for (int i = 0; i < cont_revistas + 1; i++) {
 						cout << "\t[" << i + 1 << "] ";
 						cout << lista_revistas[i].titulo << " (" << lista_revistas[i].id << ")\n";
 					}
-					set_color(7);
+					set_color(5);
 					cout << "\n\nEscolha a opcao que deseja alterar: ";
+					set_color(7);
 					cin >> escolha;
 
 					usuario.id = lista_revistas[escolha - 1].id;
@@ -1018,14 +1031,16 @@ int main()
 
 				case 3: //alterar autor
 					system("cls");
-					cout << "\nLista atual de autores cadastrados: \n\n" << endl;
 					set_color(5);
+					cout << "\nLista atual de autores cadastrados: \n\n" << endl;
+					set_color(7);
 					for (int i = 0; i < cont_autor + 1; i++) {
 						cout << "\t[" << i + 1 << "] ";
 						mostrar_autor(lista_autores[i]);
 					}
-					set_color(7);
+					set_color(5);
 					cout << "\n\nEscolha a opcao que deseja alterar: ";
+					set_color(7);
 					cin >> escolha;
 
 					cin.ignore();
@@ -1041,14 +1056,16 @@ int main()
 
 				case 4: //alterar editora
 					system("cls");
-					cout << "\nLista atual de editoras cadastradas: \n\n" << endl;
 					set_color(5);
+					cout << "\nLista atual de editoras cadastradas: \n\n" << endl;
+					set_color(7);
 					for (int i = 0; i < cont_editora + 1; i++) {
 						cout << "\t[" << i + 1 << "] ";
 						mostrar_editora(lista_editoras[i]);
 					}
-					set_color(7);
+					set_color(5);
 					cout << "\n\nEscolha a opcao que deseja alterar: ";
+					set_color(7);
 					cin >> escolha;
 
 					cin.ignore();
@@ -1080,7 +1097,7 @@ int main()
 				system("cls");
 				break;
 
-			case 1:
+			case 1: // LISTA LIVROS
 				system("cls");
 				cout << "\nLista de Livros (Id - Titulo)\n" << endl;
 
@@ -1156,7 +1173,7 @@ int main()
 				system("pause");
 				break;
 
-			case 2:
+			case 2: // LISTA REVISTAS
 				system("cls");
 				cout << "\nLista de Revistas (id e titulo): \n" << endl;
 
