@@ -1439,7 +1439,7 @@ int main()
 				cout << "- - - - - Usuarios com Atraso de Devolucao - - - - -\n\n";
 				set_color(7);
 				soma = 0;
-				for (int i = 0; i < cont_usuario + 1; i++) {
+				for (int i = 0; i < cont_usuario; i++) {
 					soma = qtd_retiradas(lista_usuarios[i]);
 
 					for (int j = 0; j < soma; j++) {
@@ -1460,29 +1460,37 @@ int main()
 
 				soma = 0;
 				flag = false;
+
 				for (int i = 0; i < cont_usuario + 1; i++) {
-					if (lista_usuarios[i].id == usuario.id) { //encontra na lista de usuarios cadastrados o usuario correspondente ao id informado
+					if (lista_usuarios[i].id == usuario.id) { // encontra na lista de usuarios cadastrados o usuario correspondente ao id informado
 						flag = true;
 						soma = qtd_retiradas(lista_usuarios[i]);
 
 						for (int j = 0; j < soma; j++) {
 							for (int k = 0; k < cont_livros; k++) {
-								if (lista_usuarios[i].retirados[j].id == lista_livros[k].id) { //mostra livros retirados
+								if (lista_usuarios[i].retirados[j].id == lista_livros[k].id) { // mostra livros retirados
 									mostrar_livro(lista_livros[k]);
-									//cout << "\tData de retirada: " << lista_usuarios[i].retirados[j].retirada;
+									cout << "\tData de retirada: ";
+									mostrar_data(lista_usuarios[i].retirados[j].retirada);
+									cout << "\tData de devolucao: ";
+									mostrar_data(lista_usuarios[i].retirados[j].devolucao);
+									cout << endl;
 								}
 							}
-						}
-						for (int j = 0; j < soma; j++) {
 							for (int k = 0; k < cont_revistas; k++) {
 								if (lista_usuarios[i].retirados[j].id == lista_revistas[k].id) { //mostra revistas retiradas
 									mostrar_revista(lista_revistas[k]);
-									//cout << "\tData de retirada: "
+									cout << "\tData de retirada: ";
+									mostrar_data(lista_usuarios[i].retirados[j].retirada);
+									cout << "\tData de devolucao: ";
+									mostrar_data(lista_usuarios[i].retirados[j].devolucao);
+									cout << endl;
 								}
 							}
 						}
 					}
 				}
+
 				if (flag == false) {
 					set_color(4);
 					cout << "\nID de Usuario nao foi encontrado, verifique existe cadastro ou se digitou o ID corretamente" << endl;
@@ -1491,6 +1499,7 @@ int main()
 				system("pause");
 				system("cls");
 				break;
+
 
 			case 4: // Listagem de Usuarios
 				system("cls");
