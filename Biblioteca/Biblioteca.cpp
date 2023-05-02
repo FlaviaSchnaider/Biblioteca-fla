@@ -280,7 +280,7 @@ void mostrar_editora(Editora ed) {
 }
 
 void mostrar_livro(Livro a) {
-	cout << "\nDados do livro:" << endl
+	cout << "\nDados do livro:\n" << endl
 		 << "\tID do livro: " << a.id << endl
 		 << "\tTitulo: " << a.titulo << endl
 
@@ -318,12 +318,12 @@ void mostrar_revista(Revista r) {
 void mostrar_usuario(Usuario u) {
 	cout << "\nDados do Usuario: " << endl
 		 << "\tID do usuario: " << u.id << endl
-		 << "\tNome Completo:" << u.nome << endl;
+		 << "\tNome Completo: " << u.nome << endl;
 }
 
 void mostrar_retirado(Retirado a) {
 	cout << "ID do item retirado: " << a.id << endl
-	 	<< "Data de retirada: ";
+		<< "Data de retirada: ";
 	mostrar_data(a.retirada.dia, a.retirada.mes, a.retirada.ano);
 	cout << endl;
 
@@ -604,12 +604,12 @@ void exibir_menu_principal() {
 	cout << "\n - - - - - - - - BIBLIOTECA - - - - - - - - \n" << endl;
 	set_color(7);
 	cout << "[1] - Cadastro" << endl
-	 	 << "[2] - Alteracao" << endl
-		 << "[3] - Retirada" << endl
-		 << "[4] - Consultar Acervo" << endl
-		 << "[5] - Central do Usuario" << endl
-		 << "[0] - Sair" << endl << endl
-		 << "Digite a opcao desejada: ";
+		<< "[2] - Alteracao" << endl
+		<< "[3] - Retirada" << endl
+		<< "[4] - Consultar Acervo" << endl
+		<< "[5] - Central do Usuario" << endl
+		<< "[0] - Sair" << endl << endl
+		<< "Digite a opcao desejada: ";
 
 }
 
@@ -618,11 +618,11 @@ void submenu_cadastro() {
 	cout << "\n - - - - - CADASTRO - - - - -\n" << endl;
 	set_color(7);
 	cout << "[1] - Livro" << endl
-		 << "[2] - Revista" << endl
-		 << "[3] - Autor" << endl
-		 << "[4] - Editora" << endl
-		 << "[0] - Voltar" << endl << endl
-		 << "Digite a opcao desejada: ";
+		<< "[2] - Revista" << endl
+		<< "[3] - Autor" << endl
+		<< "[4] - Editora" << endl
+		<< "[0] - Voltar" << endl << endl
+		<< "Digite a opcao desejada: ";
 }
 
 void submenu_alteracao() {
@@ -630,11 +630,11 @@ void submenu_alteracao() {
 	cout << "\n - - - - - ALTERACAO - - - - -\n" << endl;
 	set_color(7);
 	cout << "[1] - Livro" << endl
-		 << "[2] - Revista" << endl
-		 << "[3] - Autor" << endl
-		 << "[4] - Editora" << endl
-		 << "[0] - Voltar" << endl << endl
-	 	 << "Digite a opcao desejada: ";
+		<< "[2] - Revista" << endl
+		<< "[3] - Autor" << endl
+		<< "[4] - Editora" << endl
+		<< "[0] - Voltar" << endl << endl
+		<< "Digite a opcao desejada: ";
 }
 
 void submenu_retirada() {
@@ -642,9 +642,9 @@ void submenu_retirada() {
 	cout << "\n - - - - - RETIRADA - - - - -\n" << endl; //FALTA MUDAR O STATUS DE DISPONIVEL DO LIVRO OU REVISTA QUANDO FOR RETIRADO
 	set_color(7);
 	cout << "[1] - Livro" << endl
-		 << "[2] - Revista" << endl
-		 << "[0] - Voltar" << endl << endl
-		 << "Digite a opcao desejada: ";
+		<< "[2] - Revista" << endl
+		<< "[0] - Voltar" << endl << endl
+		<< "Digite a opcao desejada: ";
 }
 
 void submenu_acervo() {
@@ -1108,8 +1108,7 @@ int main()
 					cout << lista_livros[i].titulo << endl;
 				}
 				do {
-					cout << endl;
-					cout << "Informe o ID do livro: ";
+					cout << "\nInforme o ID do livro: ";
 					cin >> escolha;
 
 					flag = false;
@@ -1140,7 +1139,7 @@ int main()
 
 						if (atraso(lista_usuarios[i]) == false) {
 							soma = qtd_retiradas(lista_usuarios[i]);
-							lista_usuarios[i].retirados[soma].id = livro.id;
+							lista_usuarios[i].retirados[soma].id = escolha;
 
 							lista_usuarios[i].retirados[soma].retirada.dia = data.dia;
 							lista_usuarios[i].retirados[soma].retirada.mes = data.mes;
@@ -1157,7 +1156,8 @@ int main()
 							cout << "\nItem retirado com sucesso!" << endl;
 							set_color(7);
 							cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
-							cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl << endl;
+							cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl;
+							cout << endl;
 						}
 						else if (atraso(lista_usuarios[i])) {
 							break;
@@ -1207,6 +1207,7 @@ int main()
 				cout << "\nEntre com a data de hoje para retirada:\n";
 				data = ler_data();
 
+				Data data_dev = data_devolucao(data);
 				soma = 0;
 				flag = false;
 				for (int i = 0; i < cont_usuario + 1; i++) {
@@ -1226,7 +1227,6 @@ int main()
 									lista_revistas[i].disponivel = false; //passa a colocar o livro como indisponivel
 								}
 							}
-							Data data_dev = data_devolucao(data);
 							set_color(2);
 							cout << "\nItem retirado com sucesso!" << endl;
 							set_color(7);
@@ -1447,14 +1447,23 @@ int main()
 				set_color(4);
 				cout << "- - - - - Usuarios com Atraso de Devolucao - - - - -\n\n";
 				set_color(7);
-				soma = 0;
-				for (int i = 0; i < cont_usuario; i++) {
-					soma = qtd_retiradas(lista_usuarios[i]);
 
-					for (int j = 0; j < soma; j++) {
-						if (lista_usuarios[i].retirados[j].atraso == true) {
-							mostrar_usuario(lista_usuarios[i]);
+				for (int i = 0; i < cont_usuario + 1; i++) {
+					if (atraso(lista_usuarios[i])) {
+						cout << "ID: " << lista_usuarios[i].id << endl;
+						cout << "\nOla " << lista_usuarios[i].nome << endl << endl;
+						cout << "\nLivros emprestados em atraso: " << endl;
+						for (int j = 0; j < qtd_retiradas(lista_usuarios[i]); j++) {
+							for (int k = 0; k < cont_livros; k++) {
+								if (lista_usuarios[i].retirados[j].id == lista_livros[k].id) { // mostra livros emprestados em atraso
+									mostrar_livro(lista_livros[k]);
+									cout << "\tData de devolucao: ";
+									mostrar_data(lista_usuarios[i].retirados[j].devolucao);
+									cout << endl;
+								}
+							}
 						}
+						cout << endl;
 					}
 				}
 				system("pause");
@@ -1473,17 +1482,17 @@ int main()
 				flag = false;
 
 				for (int i = 0; i < cont_usuario + 1; i++) {
-				if (lista_usuarios[i].id == usuario.id) { // encontra na lista de usuarios cadastrados o usuario correspondente ao id informado
+					if (lista_usuarios[i].id == usuario.id) { // encontra na lista de usuarios cadastrados o usuario correspondente ao id informado
 						flag = true;
 						soma = qtd_retiradas(lista_usuarios[i]);
-
+						cout << "\nHistorico de Retirada para " << lista_usuarios[i].nome << ": " << endl << endl;
 						for (int j = 0; j < soma; j++) {
 							for (int k = 0; k < cont_livros; k++) {
 								if (lista_usuarios[i].retirados[j].id == lista_livros[k].id) { // mostra livros retirados
 									mostrar_livro(lista_livros[k]);
 									cout << "\tData de retirada: ";
 									mostrar_data(lista_usuarios[i].retirados[j].retirada);
-									cout << "\tData de devolucao: ";
+									cout << "\n\tData de devolucao: ";
 									mostrar_data(lista_usuarios[i].retirados[j].devolucao);
 									cout << endl;
 								}
@@ -1491,10 +1500,9 @@ int main()
 							for (int k = 0; k < cont_revistas; k++) {
 								if (lista_usuarios[i].retirados[j].id == lista_revistas[k].id) { //mostra revistas retiradas
 									mostrar_revista(lista_revistas[k]);
-									cout << "\tData de retirada: ";
+									cout << "\n\tData de retirada: ";
 									mostrar_data(lista_usuarios[i].retirados[j].retirada);
-									cout << "\tData de devolucao: ";
-									mostrar_data(lista_usuarios[i].retirados[j].devolucao);
+								//	cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl << endl;
 									cout << endl;
 								}
 							}
@@ -1507,6 +1515,7 @@ int main()
 					cout << "\nID de Usuario nao foi encontrado, verifique existe cadastro ou se digitou o ID corretamente" << endl;
 					set_color(7);
 				}
+				cout << endl;
 				system("pause");
 				system("cls");
 				break;
