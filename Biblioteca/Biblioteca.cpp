@@ -71,16 +71,24 @@ struct Revista {
 	bool disponivel = true;
 };
 
+Data hoje;
+
 Data ler_data() {
 	Data d;
-	cout << "\tDia: ";
-	cin >> d.dia;
-	cout << "\tMes: ";
-	cin >> d.mes;
-	cout << "\tAno: ";
-	cin >> d.ano;
-
+	do {
+		cout << "\tDia: ";
+		cin >> d.dia;
+		cout << "\tMes: ";
+		cin >> d.mes;
+		cout << "\tAno: ";
+		cin >> d.ano;
+		cout << endl;
+	} while (d.dia > 31 || d.mes < 1 || d.mes > 12 || d.ano < 1900);
 	return d;
+}
+
+void mostrar_data(Data d) {
+	cout << d.dia << "/" << d.mes << "/" << d.ano;
 }
 
 int dias_no_mes(int mes, int ano) {
@@ -1126,40 +1134,49 @@ int main()
 				cout << "\nInforme seu ID de usuario: ";
 				cin >> usuario.id;
 
-				cout << "\nData de retirada: \n";
-				data = ler_data();
+				cout << "\nEntre com a data de hoje para retirada:\n";
+				Data data = ler_data();
 
-				soma = 0;
-				flag = false;
-				for (int i = 0; i < cont_usuario + 1; i++) {
-					if (lista_usuarios[i].id == usuario.id) {
-						flag = true;
+				if (data.ano < hoje.ano ||
+					(data.ano == hoje.ano && data.mes < hoje.mes) ||
+					(data.ano == hoje.ano && data.mes == hoje.mes && data.dia < hoje.dia)) {
+					cout << "Data de retirada anterior a data de hoje. Operacao nao permitida.\n";
+					// Não permitir a retirada do livro
+				}
+				else { // Permitir a retirada do livro
+					soma = 0;
+					flag = false;
+					for (int i = 0; i < cont_usuario + 1; i++) {
+						if (lista_usuarios[i].id == usuario.id) {
+							flag = true;
 
-						if (atraso(lista_usuarios[i]) == false) {
-							soma = qtd_retiradas(lista_usuarios[i]);
-							lista_usuarios[i].retirados[soma].id = livro.id;
+							if (atraso(lista_usuarios[i]) == false) {
+								soma = qtd_retiradas(lista_usuarios[i]);
+								lista_usuarios[i].retirados[soma].id = livro.id;
 
-							lista_usuarios[i].retirados[soma].retirada.dia = data.dia;
-							lista_usuarios[i].retirados[soma].retirada.mes = data.mes;
-							lista_usuarios[i].retirados[soma].retirada.ano = data.ano;
+								lista_usuarios[i].retirados[soma].retirada.dia = data.dia;
+								lista_usuarios[i].retirados[soma].retirada.mes = data.mes;
+								lista_usuarios[i].retirados[soma].retirada.ano = data.ano;
 
-							for (int i = 0; i < cont_livros + 1; i++) {
-								if (lista_livros[i].id == escolha) {
-									lista_livros[i].disponivel = false; //passa a colocar o livro como indisponivel
+								for (int i = 0; i < cont_livros + 1; i++) {
+									if (lista_livros[i].id == escolha) {
+										lista_livros[i].disponivel = false; //passa a colocar o livro como indisponivel
+									}
 								}
-							}
 
-							Data data_dev = data_devolucao(data);
-							cout << "\nItem retirado com sucesso!" << endl;
-							cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
-							cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl;
-							cout << endl;
-						}
-						else if (atraso(lista_usuarios[i])) {
-							break;
+								Data data_dev = data_devolucao(data);
+								cout << "\nItem retirado com sucesso!" << endl;
+								cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
+								cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl;
+								cout << endl;
+							}
+							else if (atraso(lista_usuarios[i])) {
+								break;
+							}
 						}
 					}
 				}
+				
 				if (flag == false) {
 					set_color(4);
 					cout << "\nID de Usuario nao foi encontrado, verifique se ja realizou cadastro ou se digitou o ID corretamente!" << endl;
