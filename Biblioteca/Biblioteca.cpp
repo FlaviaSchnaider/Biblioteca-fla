@@ -1099,14 +1099,14 @@ int main()
 
 			case 1: // LISTA LIVROS
 				system("cls");
-				cout << "\nLista de Livros (Id - Titulo)\n" << endl;
-
 				set_color(5);
+				cout << "\nLista de Livros (Id - Titulo)\n" << endl;
+				set_color(7);
+
 				for (int i = 0; i < cont_livros + 1; i++) {
 					cout << "\t[" << lista_livros[i].id << "] - ";
 					cout << lista_livros[i].titulo << endl;
 				}
-				set_color(7);
 				do {
 					cout << endl;
 					cout << "Informe o ID do livro: ";
@@ -1175,14 +1175,14 @@ int main()
 
 			case 2: // LISTA REVISTAS
 				system("cls");
-				cout << "\nLista de Revistas (id e titulo): \n" << endl;
-
 				set_color(5);
+				cout << "\nLista de Revistas (id e titulo): \n" << endl;
+				set_color(7);
+
 				for (int i = 0; i < cont_revistas + 1; i++) {
 					cout << "\t[" << lista_revistas[i].id << "] ";
 					cout << lista_revistas[i].titulo << endl;
 				}
-				set_color(7);
 				do {
 					cout << endl;
 					cout << "\nInforme o ID da revista que deseja retirar: ";
