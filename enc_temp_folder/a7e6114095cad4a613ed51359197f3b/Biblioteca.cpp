@@ -71,6 +71,8 @@ struct Revista {
 	bool disponivel = true;
 };
 
+Data hoje;
+
 Data ler_data() {
 	Data d;
 	do {
@@ -1156,9 +1158,7 @@ int main()
 							}
 
 							Data data_dev = data_devolucao(data);
-							set_color(2);
 							cout << "\nItem retirado com sucesso!" << endl;
-							set_color(7);
 							cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
 							cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl;
 							cout << endl;
@@ -1231,9 +1231,7 @@ int main()
 								}
 							}
 							Data data_dev = data_devolucao(data);
-							set_color(2);
 							cout << "\nItem retirado com sucesso!" << endl;
-							set_color(7);
 							cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
 							cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl;
 							cout << endl;
