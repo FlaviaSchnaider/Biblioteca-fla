@@ -1274,7 +1274,9 @@ int main()
 						break;
 
 					case 1: //mostrar todos os livros
+						set_color(5);
 						cout << "\n - - - - - LISTAGEM DE LIVROS - - - - -" << endl;
+						set_color(7);
 						for (int i = 0; i < cont_livros; i++) {
 							mostrar_livro(lista_livros[i]);
 						}
@@ -1282,7 +1284,9 @@ int main()
 						break;
 
 					case 2: // mostrar todos os livros e revistas disponiveis
+						set_color(5);
 						cout << "\nLista de livros disponiveis:\n" << endl;
+						set_color(7);
 						for (int i = 0; i < cont_livros + 1; i++) {
 							if (lista_livros[i].disponivel) {
 								mostrar_livro(lista_livros[i]);
@@ -1298,7 +1302,9 @@ int main()
 						break;
 
 					case 3: //mostrar todas as revistas
+						set_color(5);
 						cout << "\n - - - - - LISTAGEM DE REVISTAS - - - - -" << endl;
+						set_color(7);
 						for (int i = 0; i < cont_livros + 1; i++) {
 							mostrar_revista(lista_revistas[i]);
 						}
@@ -1306,7 +1312,9 @@ int main()
 						break;
 
 					case 4: //mostrar livros de um autor especifico
+						set_color(5);
 						cout << "\nLista atual de autores cadastrados: " << endl;
+						set_color(7);
 						for (int i = 0; i < cont_autor + 1; i++) {
 							cout << "\t[" << i + 1 << "] ";
 							mostrar_autor(lista_autores[i]);
@@ -1331,7 +1339,9 @@ int main()
 						break;
 
 					case 5: //mostrar livros e revistas de uma editora
+						set_color(5);
 						cout << "\nLista atual de editoras cadastradas: " << endl;
+						set_color(7);
 						for (int i = 0; i < cont_editora + 1; i++) {
 							cout << "\t[" << i + 1 << "] ";
 							mostrar_editora(lista_editoras[i]);
@@ -1361,7 +1371,9 @@ int main()
 
 					case 6: //mostrar livros e revistas de um assunto
 						cin.ignore();
+						set_color(5);
 						cout << "Qual assunto deseja encontrar? ";
+						set_color(7);
 						getline(cin, aux);
 
 						flag = false;
@@ -1503,7 +1515,7 @@ int main()
 			case 4: // Listagem de Usuarios
 				system("cls");
 				set_color(5);
-				cout << "- - - - - LISTAGEM DE USUARIOS - - - - -\n" << endl;
+				cout << "\t- - - - - LISTAGEM DE USUARIOS - - - - -" << endl;
 				set_color(7);
 				for (int i = 0; i < cont_usuario + 1; i++) {
 					mostrar_usuario(lista_usuarios[i]);
