@@ -3,29 +3,9 @@
 #include <time.h>
 #include <ctime> // Para conseguir fazer a parte de mostrar a data atual
 #include <Windows.h>
-
-/*
-Deve ser implementado um pequeno sistema que fará a gestão de uma pequena biblioteca de livros e revistas.
-Esse sistema será executado apenas em memória principal,portanto não há necessidade de salvar os materiais
-cadastrados para uso futuro. A implementação dos recursos do sistema como livros, revistas, usuários, autores e
-outros deve acontecer, necessariamente com o uso de structs (estruturas) da linguagem C/C++ e
-devem ficar armazenados em vetores desse tipo de dado.
-Os recursos (obrigatórios) necessários a serem oferecidos ao usuário, via um menu de
-opções, são os seguintes:
-	• Cadastro de livros e revistas, com possiblidade de alteração (não precisa remover);
-	• Cada livro pode ter apenas um autor;
-	• Pesquisar qualquer item armazenado por título, autor, editora ou assunto;
-	• Deve haver um cadastro de autores (dos livros) e editoras (livros e revistas), com a possibilidade de incluir e alterar;
-	• Deve haver um cadastro de usuário que podem retirar livros para devolução após 7 dias;
-	• Listagens necessárias (relatórios em tela):
-		o Livros/Revistas de um autor ou editora
-		o Livros/Revistas de um assunto
-		o Livros/Revistas em atraso de devolução
-		o Histórico de retiradas de um usuário
-*/
-
 using namespace std;
 
+// Trabalho feito por Flávia Schnaider e Helena Becker Piazera
 const int MAX_RETIRADOS = 100;
 
 #pragma region Structs
@@ -81,7 +61,7 @@ Data ler_data() {
 		cout << "\tAno: ";
 		cin >> d.ano;
 		cout << endl;
-	} while (d.dia > 31 || d.mes < 1 || d.mes > 12 || d.ano < 1900);
+	} while (d.dia > 31 || d.mes < 1 || d.mes > 12 || d.ano < 1900 || d.ano > 2023);
 
 	return d;
 }
@@ -288,16 +268,16 @@ void mostrar_editora(Editora ed) {
 
 void mostrar_livro(Livro a) {
 	cout << "\nDados do livro:\n" << endl
-		 << "\tID do livro: " << a.id << endl
-		 << "\tTitulo: " << a.titulo << endl
+		<< "\tID do livro: " << a.id << endl
+		<< "\tTitulo: " << a.titulo << endl
 
-		 << "\tAutor: ";
+		<< "\tAutor: ";
 	mostrar_autor(a.autor);
 	cout << "\tEditora: ";
 	mostrar_editora(a.editora);
 
 	cout << "\tAno de Publicacao: " << a.publicacao << endl
-		 << "\tAssunto: " << a.assunto << endl;
+		<< "\tAssunto: " << a.assunto << endl;
 
 	if (a.disponivel == true)
 		cout << "\tDisponivel\n";
@@ -307,10 +287,10 @@ void mostrar_livro(Livro a) {
 
 void mostrar_revista(Revista r) {
 	cout << "\nDados da Revista:" << endl
-		 << "\tID da revista: " << r.id << endl
-		 << "\tTitulo: " << r.titulo << endl
+		<< "\tID da revista: " << r.id << endl
+		<< "\tTitulo: " << r.titulo << endl
 
-		 << "\tEditora: ";
+		<< "\tEditora: ";
 	mostrar_editora(r.editora);
 
 	cout << "\tData da Publicacao " << r.publicacao.mes << "/" << r.publicacao.ano << endl;
@@ -324,8 +304,8 @@ void mostrar_revista(Revista r) {
 
 void mostrar_usuario(Usuario u) {
 	cout << "\nDados do Usuario: " << endl
-		 << "\tID do usuario: " << u.id << endl
-		 << "\tNome Completo: " << u.nome << endl;
+		<< "\tID do usuario: " << u.id << endl
+		<< "\tNome Completo: " << u.nome << endl;
 }
 
 int gerar_ID(int num) {
@@ -602,9 +582,9 @@ void exibir_menu_principal() {
 		<< "[4] - Consultar Acervo" << endl
 		<< "[5] - Central do Usuario" << endl
 		<< "[0] - Sair" << endl << endl;
-		set_color(5);
-		cout << "Digite uma opcao de menu: ";
-		set_color(7);
+	set_color(5);
+	cout << "Digite uma opcao de menu: ";
+	set_color(7);
 
 }
 
@@ -617,9 +597,9 @@ void submenu_cadastro() {
 		<< "[3] - Autor" << endl
 		<< "[4] - Editora" << endl
 		<< "[0] - Voltar" << endl << endl;
-		set_color(5);
-		cout << "Digite uma opcao de menu: ";
-		set_color(7);
+	set_color(5);
+	cout << "Digite uma opcao de menu: ";
+	set_color(7);
 }
 
 void submenu_alteracao() {
@@ -631,9 +611,9 @@ void submenu_alteracao() {
 		<< "[3] - Autor" << endl
 		<< "[4] - Editora" << endl
 		<< "[0] - Voltar" << endl << endl;
-		set_color(5);
-		cout << "Digite uma opcao de menu: ";
-		set_color(7);
+	set_color(5);
+	cout << "Digite uma opcao de menu: ";
+	set_color(7);
 }
 
 void submenu_retirada() {
@@ -643,9 +623,9 @@ void submenu_retirada() {
 	cout << "[1] - Livro" << endl
 		<< "[2] - Revista" << endl
 		<< "[0] - Voltar" << endl << endl;
-		set_color(5);
-		cout << "Digite uma opcao de menu: ";
-		set_color(7);
+	set_color(5);
+	cout << "Digite uma opcao de menu: ";
+	set_color(7);
 }
 
 void submenu_acervo() {
@@ -655,9 +635,9 @@ void submenu_acervo() {
 	cout << "[1] - Pesquisa Filtrada" << endl
 		<< "[2] - Listagem Completa" << endl
 		<< "[0] - Voltar" << endl << endl;
-		set_color(5);
-		cout << "Digite uma opcao de menu: ";
-		set_color(7);
+	set_color(5);
+	cout << "Digite uma opcao de menu: ";
+	set_color(7);
 }
 
 void submenu_central_usuario() {
@@ -669,9 +649,9 @@ void submenu_central_usuario() {
 		<< "[3] - Historico de retiradas" << endl
 		<< "[4] - Listagem de Usuarios" << endl
 		<< "[0] - Voltar" << endl << endl;
-		set_color(5);
-		cout << "Digite uma opcao de menu: ";
-		set_color(7);
+	set_color(5);
+	cout << "Digite uma opcao de menu: ";
+	set_color(7);
 }
 
 void submenu_filtrar_pesquisa() {
@@ -685,9 +665,9 @@ void submenu_filtrar_pesquisa() {
 		<< "[5] - Editora" << endl
 		<< "[6] - Assunto" << endl
 		<< "[0] - Voltar" << endl << endl;
-		set_color(5);
-		cout << "\nDigite uma opcao de menu: ";
-		set_color(7);
+	set_color(5);
+	cout << "\nDigite uma opcao de menu: ";
+	set_color(7);
 }
 #pragma endregion  Menu
 
@@ -1538,7 +1518,7 @@ int main()
 									mostrar_revista(lista_revistas[k]);
 									cout << "\n\tData de retirada: ";
 									mostrar_data(lista_usuarios[i].retirados[j].retirada);
-								//	cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl << endl;
+									//	cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl << endl;
 									cout << endl;
 								}
 							}
