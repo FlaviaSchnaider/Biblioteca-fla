@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <time.h>
-#include <ctime>
+#include <ctime> // Para conseguir fazer a parte de mostrar a data atual
 #include <Windows.h>
 
 /*
@@ -87,7 +87,15 @@ Data ler_data() {
 }
 
 void mostrar_data(Data d) {
-	cout << d.dia << "/" << d.mes << "/" << d.ano;
+	if (d.dia < 10){
+		cout << "0" << d.dia << "/" << d.mes << "/" << d.ano;
+	}
+	else if (d.mes < 10){
+		cout <<  d.dia << "/0" << d.mes << "/" << d.ano;
+	}
+	else {
+		cout << d.dia << "/" << d.mes << "/" << d.ano;
+	}
 }
 
 int dias_no_mes(int mes, int ano) {
@@ -600,16 +608,15 @@ bool livro_disponivel(Livro livro) {
 
 #pragma region Menu
 void exibir_menu_principal() {
-	set_color(5);
-	cout << "\n - - - - - - - - BIBLIOTECA - - - - - - - - \n" << endl;
-	set_color(7);
-	cout << "[1] - Cadastro" << endl
+	cout << "\n[1] - Cadastro" << endl
 		<< "[2] - Alteracao" << endl
 		<< "[3] - Retirada" << endl
 		<< "[4] - Consultar Acervo" << endl
 		<< "[5] - Central do Usuario" << endl
-		<< "[0] - Sair" << endl << endl
-		<< "Digite a opcao desejada: ";
+		<< "[0] - Sair" << endl << endl;
+		set_color(5);
+		cout << "Digite uma opcao de menu: ";
+		set_color(5);
 
 }
 
@@ -621,8 +628,10 @@ void submenu_cadastro() {
 		<< "[2] - Revista" << endl
 		<< "[3] - Autor" << endl
 		<< "[4] - Editora" << endl
-		<< "[0] - Voltar" << endl << endl
-		<< "Digite a opcao desejada: ";
+		<< "[0] - Voltar" << endl << endl;
+		set_color(5);
+		cout << "Digite uma opcao de menu: ";
+		set_color(5);
 }
 
 void submenu_alteracao() {
@@ -633,8 +642,10 @@ void submenu_alteracao() {
 		<< "[2] - Revista" << endl
 		<< "[3] - Autor" << endl
 		<< "[4] - Editora" << endl
-		<< "[0] - Voltar" << endl << endl
-		<< "Digite a opcao desejada: ";
+		<< "[0] - Voltar" << endl << endl;
+		set_color(5);
+		cout << "Digite uma opcao de menu: ";
+		set_color(5);
 }
 
 void submenu_retirada() {
@@ -643,8 +654,10 @@ void submenu_retirada() {
 	set_color(7);
 	cout << "[1] - Livro" << endl
 		<< "[2] - Revista" << endl
-		<< "[0] - Voltar" << endl << endl
-		<< "Digite a opcao desejada: ";
+		<< "[0] - Voltar" << endl << endl;
+		set_color(5);
+		cout << "Digite uma opcao de menu: ";
+		set_color(5);
 }
 
 void submenu_acervo() {
@@ -653,8 +666,10 @@ void submenu_acervo() {
 	set_color(7);
 	cout << "[1] - Pesquisa Filtrada" << endl
 		<< "[2] - Listagem Completa" << endl
-		<< "[0] - Voltar" << endl << endl
-		<< "Digite a opcao desejada: ";
+		<< "[0] - Voltar" << endl << endl;
+		set_color(5);
+		cout << "Digite uma opcao de menu: ";
+		set_color(5);
 }
 
 void submenu_central_usuario() {
@@ -665,8 +680,10 @@ void submenu_central_usuario() {
 		<< "[2] - Usuarios com atraso de devolucao" << endl
 		<< "[3] - Historico de retiradas" << endl
 		<< "[4] - Listagem de Usuarios" << endl
-		<< "[0] - Voltar" << endl << endl
-		<< "Digite a opcao desejada: ";
+		<< "[0] - Voltar" << endl << endl;
+		set_color(5);
+		cout << "Digite uma opcao de menu: ";
+		set_color(5);
 }
 
 void submenu_filtrar_pesquisa() {
@@ -679,13 +696,29 @@ void submenu_filtrar_pesquisa() {
 		<< "[4] - Autor" << endl
 		<< "[5] - Editora" << endl
 		<< "[6] - Assunto" << endl
-		<< "[0] - Voltar" << endl << endl
-		<< "\nEscolha uma opcao: ";
+		<< "[0] - Voltar" << endl << endl;
+		set_color(5);
+		cout << "\nDigite uma opcao de menu: ";
+		set_color(5);
 }
 #pragma endregion  Menu
 
 int main()
 {
+#pragma region Data atual
+	int year, month, day;
+	struct tm timeinfo;
+	time_t now = time(0);
+
+	localtime_s(&timeinfo, &now);
+	year = timeinfo.tm_year + 1900;
+	month = timeinfo.tm_mon + 1;
+	day = timeinfo.tm_mday;
+
+	Data data_atual = { day, month, year };
+
+#pragma endregion Data atual
+
 #pragma region listas
 	//listas
 	Autor lista_autores[100];
@@ -747,6 +780,12 @@ int main()
 	while (true)
 	{
 		do {
+			set_color(5);
+			cout << "\n- - - - - - - - BIBLIOTECA - - - - - - - - -" << endl;
+			cout << "\t\t";
+			mostrar_data(data_atual);
+			set_color(7);
+			cout << endl;
 			exibir_menu_principal();
 			cin >> escolha_menu_principal;
 			system("cls");
