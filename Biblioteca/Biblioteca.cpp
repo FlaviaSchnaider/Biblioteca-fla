@@ -87,15 +87,14 @@ Data ler_data() {
 }
 
 void mostrar_data(Data d) {
-	if (d.dia < 10){
-		cout << "0" << d.dia << "/" << d.mes << "/" << d.ano;
+	if (d.dia < 10) {
+		cout << "0";
 	}
-	else if (d.mes < 10){
-		cout <<  d.dia << "/0" << d.mes << "/" << d.ano;
+	cout << d.dia << "/";
+	if (d.mes < 10) {
+		cout << "0";
 	}
-	else {
-		cout << d.dia << "/" << d.mes << "/" << d.ano;
-	}
+	cout << d.mes << "/" << d.ano;
 }
 
 int dias_no_mes(int mes, int ano) {
@@ -327,17 +326,6 @@ void mostrar_usuario(Usuario u) {
 	cout << "\nDados do Usuario: " << endl
 		 << "\tID do usuario: " << u.id << endl
 		 << "\tNome Completo: " << u.nome << endl;
-}
-
-void mostrar_retirado(Retirado a) {
-	cout << "ID do item retirado: " << a.id << endl
-		<< "Data de retirada: ";
-	mostrar_data(a.retirada.dia, a.retirada.mes, a.retirada.ano);
-	cout << endl;
-
-	cout << "Data limite de devolucao: ";
-	mostrar_data(a.devolucao.dia, a.devolucao.mes, a.devolucao.ano);
-	cout << endl;
 }
 
 int gerar_ID(int num) {
@@ -616,7 +604,7 @@ void exibir_menu_principal() {
 		<< "[0] - Sair" << endl << endl;
 		set_color(5);
 		cout << "Digite uma opcao de menu: ";
-		set_color(5);
+		set_color(7);
 
 }
 
@@ -631,7 +619,7 @@ void submenu_cadastro() {
 		<< "[0] - Voltar" << endl << endl;
 		set_color(5);
 		cout << "Digite uma opcao de menu: ";
-		set_color(5);
+		set_color(7);
 }
 
 void submenu_alteracao() {
@@ -645,7 +633,7 @@ void submenu_alteracao() {
 		<< "[0] - Voltar" << endl << endl;
 		set_color(5);
 		cout << "Digite uma opcao de menu: ";
-		set_color(5);
+		set_color(7);
 }
 
 void submenu_retirada() {
@@ -657,7 +645,7 @@ void submenu_retirada() {
 		<< "[0] - Voltar" << endl << endl;
 		set_color(5);
 		cout << "Digite uma opcao de menu: ";
-		set_color(5);
+		set_color(7);
 }
 
 void submenu_acervo() {
@@ -669,7 +657,7 @@ void submenu_acervo() {
 		<< "[0] - Voltar" << endl << endl;
 		set_color(5);
 		cout << "Digite uma opcao de menu: ";
-		set_color(5);
+		set_color(7);
 }
 
 void submenu_central_usuario() {
@@ -683,7 +671,7 @@ void submenu_central_usuario() {
 		<< "[0] - Voltar" << endl << endl;
 		set_color(5);
 		cout << "Digite uma opcao de menu: ";
-		set_color(5);
+		set_color(7);
 }
 
 void submenu_filtrar_pesquisa() {
@@ -699,7 +687,7 @@ void submenu_filtrar_pesquisa() {
 		<< "[0] - Voltar" << endl << endl;
 		set_color(5);
 		cout << "\nDigite uma opcao de menu: ";
-		set_color(5);
+		set_color(7);
 }
 #pragma endregion  Menu
 
@@ -1163,11 +1151,17 @@ int main()
 					}
 				} while (flag == false);
 
-				cout << "\n\nInforme seu ID de usuario: ";
+				cout << "\nInforme seu ID de usuario: ";
 				cin >> usuario.id;
 
-				cout << "\nEntre com a data de hoje para retirada:\n";
+				cout << "\nEntre com a data de retirada:\n";
 				Data data = ler_data();
+
+				/*if (data.dia == data_atual.dia && data.mes == data_atual.mes && data.ano == data_atual.ano) {
+						// Data válida, continuar com a operação
+				} else {
+				 cout << "Operação inválida: a data informada não é a data atual.\n";
+				} */
 
 				// Permitir a retirada do livro
 				soma = 0;
@@ -1183,6 +1177,7 @@ int main()
 							lista_usuarios[i].retirados[soma].retirada.dia = data.dia;
 							lista_usuarios[i].retirados[soma].retirada.mes = data.mes;
 							lista_usuarios[i].retirados[soma].retirada.ano = data.ano;
+							lista_usuarios[i].retirados[soma].devolucao = data_devolucao(data);
 
 							for (int i = 0; i < cont_livros + 1; i++) {
 								if (lista_livros[i].id == escolha) {
@@ -1190,13 +1185,13 @@ int main()
 								}
 							}
 
-							Data data_dev = data_devolucao(data);
 							set_color(2);
 							cout << "\nItem retirado com sucesso!" << endl;
 							set_color(7);
 							cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
-							cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl;
-							cout << endl;
+							cout << "\tData de devolucao: ";
+							mostrar_data(lista_usuarios[i].retirados[soma].devolucao);
+							cout << endl << endl;
 						}
 						else if (atraso(lista_usuarios[i])) {
 							break;
@@ -1240,13 +1235,12 @@ int main()
 					}
 				} while (flag == false);
 
-				cout << "\n\nInforme seu ID de usuario: ";
+				cout << "\nInforme seu ID de usuario: ";
 				cin >> usuario.id;
 
-				cout << "\nEntre com a data de hoje para retirada:\n";
+				cout << "\nEntre com a data de retirada:\n";
 				data = ler_data();
 
-				Data data_dev = data_devolucao(data);
 				soma = 0;
 				flag = false;
 				for (int i = 0; i < cont_usuario + 1; i++) {
@@ -1260,6 +1254,7 @@ int main()
 							lista_usuarios[i].retirados[soma].retirada.dia = data.dia;
 							lista_usuarios[i].retirados[soma].retirada.mes = data.mes;
 							lista_usuarios[i].retirados[soma].retirada.ano = data.ano;
+							lista_usuarios[i].retirados[soma].devolucao = data_devolucao(data);
 
 							for (int i = 0; i < cont_revistas + 1; i++) {
 								if (lista_revistas[i].id == escolha) {
@@ -1270,7 +1265,9 @@ int main()
 							cout << "\nItem retirado com sucesso!" << endl;
 							set_color(7);
 							cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
-							cout << "\tData de devolucao: " << data_dev.dia << "/" << data_dev.mes << "/" << data_dev.ano << endl << endl;
+							cout << "\tData de devolucao: ";
+							mostrar_data(lista_usuarios[i].retirados[soma].devolucao);
+							cout << endl << endl;
 						}
 						else if (atraso(lista_usuarios[i])) {
 							break;
