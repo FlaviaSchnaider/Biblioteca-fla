@@ -137,14 +137,11 @@ Editora ler_editora() {
 	return editora;
 }
 
-Usuario cadastrar_usuario(int id) {
+Usuario cadastrar_usuario() {
 	Usuario u;
 	cin.ignore();
 	cout << "\nNome Completo: ";
 	getline(cin, u.nome);
-
-	u.id = id;
-	cout << "Seu identificador de usuario: " << u.id;
 
 	return u;
 }
@@ -279,10 +276,12 @@ void mostrar_livro(Livro a) {
 	cout << "\tAno de Publicacao: " << a.publicacao << endl
 		<< "\tAssunto: " << a.assunto << endl;
 
-	if (a.disponivel == true)
+	if (a.disponivel == true) {
 		cout << "\tDisponivel\n";
-	else
+	}
+	else {
 		cout << "\tIndisponivel\n";
+	}
 }
 
 void mostrar_revista(Revista r) {
@@ -327,10 +326,11 @@ int gerar_ID(int num) {
 
 //gera cadastros iniciais de titulos
 void gerar_titulos(string lista_titulos[], string titulos_revistas[]) {
-	const int tam = 9, tam2 = 10;
+	const int tam = 5, tam2 = 10;
 	string titulos[] = { "Tudo ou Nada", "Amanha eh outro dia", "Felizes para Sempre", "A Ultima Batalha", "Guerra dos Reis", "A Voz da Natureza", "Canto da Tempestade", "Maldicao Azul", "Harmonia em Vermelho", "Deuses em Caos" };
-
+	bool flag = false;
 	int aux[tam] = { 0 }, a = 0;
+
 	srand(time(NULL));
 	for (int i = 0; i < tam; i++) {
 		a = rand() % tam2;
@@ -339,16 +339,21 @@ void gerar_titulos(string lista_titulos[], string titulos_revistas[]) {
 			aux[i] = a;
 		}
 		else if (i > 0) {
-			if (a != aux[i - 1]) {
+			flag = false;
+			for (int j = 0; j < i; j++) {
+				if (a == aux[j]) {
+					flag = true; //verifica se o titulo de livro ja foi cadastrado uma vez
+				}
+			}
+			if (flag) {
+				i--; //se ja houver cadastro, nao permite cadastro igual
+			}
+			else if (flag == false) {
 				lista_titulos[i] = titulos[a];
 				aux[i] = a;
 			}
-			else {
-				i--;
-			}
 		}
 	}
-
 	const int tam_r = 4, tam2_r = 10;
 	int aux2[tam_r] = { 0 }, b = 0;
 	string titulos_r[] = { "Vogue", "ELLE", "V Magazine", "Capricho", "Caras", "Veja SP", "A Sentinela", "Despertai", "Crusoé Revista Digital Semanal", "Manequim" };
@@ -361,12 +366,18 @@ void gerar_titulos(string lista_titulos[], string titulos_revistas[]) {
 			aux2[i] = b;
 		}
 		else if (i > 0) {
-			if (b != aux2[i - 1]) {
+			flag = false;
+			for (int j = 0; j < i; j++) {
+				if (b == aux2[j]) {
+					flag = true; //verifica se o titulo de revista ja foi cadastrado uma vez
+				}
+			}
+			if (flag) {
+				i--; //se ja houver cadastro, nao permite cadastro igual
+			}
+			else if (flag == false) {
 				titulos_revistas[i] = titulos_r[b];
 				aux2[i] = b;
-			}
-			else {
-				i--;
 			}
 		}
 	}
@@ -375,6 +386,7 @@ void gerar_titulos(string lista_titulos[], string titulos_revistas[]) {
 //gera cadastros iniciais de autores
 void gerar_autores(Autor lista_autores[]) {
 	const int tam = 5;
+	bool flag = false;
 	string nomes[] = { "Maria", "Ana Carolina", "Davi", "Fernando", "Renato", "Gloria", "Erico", "Lais", "Juliano", "Rodrigo" };
 	string sobrenomes[] = { "Moraes", "da Silva", "Pereira", "dos Santos", "Cruz", "Souza", "Lima", "Soares", "Zacarias", "Oliveira" };
 
@@ -387,16 +399,21 @@ void gerar_autores(Autor lista_autores[]) {
 			aux[i] = a;
 		}
 		else if (i > 0) {
-			if (a != aux[i - 1]) {
-				lista_autores[i].nome = nomes[a];
-				aux[i] = a;
+			flag = false;
+			for (int j = 0; j < i; j++) {
+				if (a == aux[j]) {
+					flag = true; //verifica se o nome ja foi cadastrado uma vez
+				}
 			}
-			else {
-				i--;
+			if (flag) {
+				i--; //se ja houver cadastro, nao permite cadastro igual de nomes
+			}
+			else if (flag == false) {
+				lista_autores[i].nome = nomes[a]; //cadastra o nome 
+				aux[i] = a;
 			}
 		}
 	}
-
 	int aux2[tam] = { 0 }, b = 0;
 	srand(time(NULL));
 	for (int i = 0; i < tam; i++) {
@@ -406,12 +423,18 @@ void gerar_autores(Autor lista_autores[]) {
 			aux2[i] = b;
 		}
 		else if (i > 0) {
-			if (b != aux2[i - 1]) {
-				lista_autores[i].sobrenome = sobrenomes[b];
-				aux2[i] = b;
+			flag = false;
+			for (int j = 0; j < i; j++) {
+				if (b == aux2[j]) {
+					flag = true; //verifica se o sobrenome ja foi cadastrado uma vez
+				}
 			}
-			else {
-				i--;
+			if (flag) {
+				i--; //se ja houver cadastro, nao permite cadastro igual de sobrenomes
+			}
+			else if (flag == false) {
+				lista_autores[i].sobrenome = sobrenomes[b]; //cadastra o sobrenome
+				aux2[i] = b;
 			}
 		}
 	}
@@ -420,42 +443,54 @@ void gerar_autores(Autor lista_autores[]) {
 //gera cadastros iniciais de editoras
 void gerar_editoras(Editora lista_editoras[]) {
 	const int tam = 9;
-	string nomes[] = { "Editora Plano", "Liberdade", "Recanto Editora", "Editora Arcanjo", "Hiperlivros", "Cometa", "Monumental", "Ponto&Virgula", "Sabedoria" };
-	string locais[] = { "Brasilia", "Porto Alegre", "Sao Paulo", "Rio de Janeiro", "Florianopolis", "Salvador", "Curitiba", "Santos", "Itajai" };
+	bool flag = false;
+	string nomes[] = { "Editora Plano", "Liberdade", "Recanto Editora", "Editora Arcanjo", "Hiperlivros", "Cometa", "Monumental", "Ponto&Virgula", "Sabedoria", "AlfaLetras", "SempreLer", "MundoPerdido" };
+	string locais[] = { "Brasilia", "Porto Alegre", "Sao Paulo", "Rio de Janeiro", "Florianopolis", "Salvador", "Curitiba", "Santos", "Itajai", "Joinville", "Manaus", "Vitoria", "Belo Horizonte", "Palmas" };
 
 	int aux[tam] = { 0 }, a = 0, aux2[tam] = { 0 }, b = 0;
 	srand(time(NULL));
 	for (int i = 0; i < tam; i++) {
-		a = rand() % tam;
+		a = rand() % 12;
 		if (i == 0) {
 			lista_editoras[i].nome = nomes[a];
 			aux[i] = a;
 		}
 		else if (i > 0) {
-			if (a != aux[i - 1]) {
+			flag = false;
+			for (int j = 0; j < i; j++) {
+				if (a == aux[j]) {
+					flag = true; //verifica se o nome de editora ja foi cadastrado uma vez
+				}
+			}
+			if (flag) {
+				i--; //se ja houver cadastro, nao permite cadastro igual
+			}
+			else if (flag == false) {
 				lista_editoras[i].nome = nomes[a];
 				aux[i] = a;
 			}
-			else {
-				i--;
-			}
 		}
 	}
-
 	srand(time(NULL));
 	for (int i = 0; i < tam; i++) {
-		b = rand() % tam;
+		b = rand() % 14;
 		if (i == 0) {
 			lista_editoras[i].local = locais[b];
 			aux2[i] = b;
 		}
 		else if (i > 0) {
-			if (b != aux2[i - 1]) {
+			flag = false;
+			for (int j = 0; j < i; j++) {
+				if (b == aux2[j]) {
+					flag = true; //verifica se o local ja foi cadastrado uma vez
+				}
+			}
+			if (flag) {
+				i--; //se ja houver cadastro, nao permite cadastro igual
+			}
+			else if (flag == false) {
 				lista_editoras[i].local = locais[b];
 				aux2[i] = b;
-			}
-			else {
-				i--;
 			}
 		}
 	}
@@ -475,12 +510,18 @@ void gerar_assuntos(string lista_assuntos[]) {
 			aux[i] = a;
 		}
 		else if (i > 0) {
-			if (a != aux[i - 1]) {
+			bool flag = false;
+			for (int j = 0; j < i; j++) {
+				if (a == aux[j]) {
+					flag = true; //verifica se o assunto ja foi cadastrado uma vez
+				}
+			}
+			if (flag) {
+				i--; //se ja houver cadastro, nao permite cadastro igual
+			}
+			else if (flag == false) {
 				lista_assuntos[i] = assuntos[a];
 				aux[i] = a;
-			}
-			else {
-				i--;
 			}
 		}
 	}
@@ -552,12 +593,18 @@ void gerar_nomes(string lista_nomes[]) {
 			aux[i] = a;
 		}
 		else if (i > 0) {
-			if (a != aux[i - 1]) {
+			bool flag = false;
+			for (int j = 0; j < i; j++) {
+				if (a == aux[j]) {
+					flag = true; //verifica se o nome ja foi cadastrado uma vez
+				}
+			}
+			if (flag) {
+				i--; //se ja houver cadastro, nao permite cadastro igual
+			}
+			else if (flag == false) {
 				lista_nomes[i] = nomes[a];
 				aux[i] = a;
-			}
-			else {
-				i--;
 			}
 		}
 	}
@@ -862,7 +909,7 @@ int main()
 						cout << "\nLista atual de autores cadastrados: \n" << endl;
 						set_color(7);
 
-						for (int i = 0; i < cont_autor; i++) {
+						for (int i = 0; i < cont_autor + 1; i++) {
 							cout << "\t[" << i + 1 << "] ";
 							mostrar_autor(lista_autores[i]); //mostra todos os autores cadastrados ate o momento
 							cout << endl;
@@ -873,14 +920,25 @@ int main()
 						set_color(5);
 						cout << "\nPreencha os dados abaixo: \n" << endl;
 						set_color(7);
-						lista_autores[cont_autor] = ler_autor();
+						autor = ler_autor();
 
-						set_color(2);
-						cout << "\n\tAutor cadastrado com sucesso!" << endl;
-						set_color(7);
-						cout << "\nDeseja cadastrar mais um autor (s/n)? ";
+						flag = false;
+						for (int i = 0; i < cont_autor + 1; i++) { //verifica se ja existe cadastro deste autor
+							if (lista_autores[cont_autor].nome == lista_autores[i].nome && lista_autores[cont_autor].sobrenome == lista_autores[i].sobrenome) {
+								cout << "\nAutor ja cadastrado no sistema" << endl;
+								flag = true;
+							}
+						}
+						if (flag = false) {
+							lista_autores[cont_autor].nome = autor.nome; //se nao tiver cadastro ainda, atualiza a lista de autores
+							lista_autores[cont_autor].sobrenome = autor.sobrenome;
+
+							set_color(2);
+							cout << "\n\tAutor cadastrado com sucesso!" << endl;
+							set_color(7);
+						}
+						cout << "\nDeseja realizar outro cadastro (s/n)? ";
 						cin >> resposta;
-
 					} while (resposta == 's' || resposta == 'S');
 
 					system("cls");
@@ -893,9 +951,9 @@ int main()
 						cout << "\nLista atual de editoras cadastradas: \n" << endl;
 						set_color(7);
 
-						for (int i = 0; i < cont_autor; i++) {
+						for (int i = 0; i < cont_editora + 1; i++) {
 							cout << "\t[" << i + 1 << "] ";
-							mostrar_autor(lista_autores[i]);  //mostra todas as editoras cadastradas ate o momento
+							mostrar_editora(lista_editoras[i]); //mostra todas as editoras cadastradas ate o momento
 							cout << endl;
 						}
 
@@ -905,41 +963,27 @@ int main()
 						cout << "\nPreencha os dados abaixo: \n" << endl;
 						set_color(7);
 
-						lista_editoras[cont_editora] = ler_editora();
-						set_color(2);
-						cout << "\n\tEditora cadastrada com sucesso!" << endl;
-						set_color(7);
-						cout << "\nDeseja cadastrar mais uma Editora (s/n)? ";
+						ed = ler_editora();
+
+						flag = false;
+						for (int i = 0; i < cont_editora + 1; i++) { //verifica se ja existe cadastro desta editora
+							if (lista_editoras[cont_editora].nome == lista_editoras[i].nome && lista_editoras[cont_editora].local == lista_editoras[i].local) {
+								cout << "\nEditora ja cadastrada no sistema" << endl;
+								flag = true;
+							}
+						}
+						if (flag = false) {
+							lista_editoras[cont_editora].nome = ed.nome; //se nao tiver cadastro ainda, atualiza a lista de editoras
+							lista_editoras[cont_editora].local = ed.local;
+
+							set_color(2);
+							cout << "\n\tEditora cadastrado com sucesso!" << endl;
+							set_color(7);
+						}
+						cout << "\nDeseja realizar outro cadastro (s/n)? ";
 						cin >> resposta;
 
 					} while (resposta == 's' || resposta == 'S');
-					system("cls");
-					break;
-
-				case 5: // cadastrar usuario
-					do {
-						cont_usuario++;
-						id_usuario++;
-						Usuario novo_usuario = cadastrar_usuario(id_usuario);
-						flag = false;
-
-						for (int i = 1; i <= cont_usuario; i++) {
-							if (lista_usuarios[i].nome == novo_usuario.nome) { // verifica se o usuário já está cadastrado
-								cout << "\nUsuario ja cadastrado." << endl;
-								cont_usuario--;
-								flag = true;
-								break;
-							}
-						}
-						if (!flag) {
-							lista_usuarios[cont_usuario] = novo_usuario;
-						}
-						set_color(2);
-						cout << "\nUsuario cadastrado com sucesso!" << endl;
-						set_color(7);
-						cout << "\nDeseja cadastrar mais um usuario (s/n)? ";
-						cin >> resposta;
-					} while (resposta == 's' || resposta == 'S'); //loop continua enquanto o usuario desejar cadastrar mais usuarios
 					system("cls");
 					break;
 				}
@@ -1104,26 +1148,40 @@ int main()
 				system("cls");
 				break;
 
-			case 1: // LISTA LIVROS
+			case 1: // RETIRADA LIVROS
 				system("cls");
 				set_color(5);
-				cout << "\nLista de Livros (Id - Titulo)\n" << endl;
+				cout << "\nLista de Livros Disponiveis (Id - Titulo)\n" << endl;
 				set_color(7);
 
-				for (int i = 0; i < cont_livros + 1; i++) {
-					cout << "\t[" << lista_livros[i].id << "] - ";
-					cout << lista_livros[i].titulo << endl;
+				for (int i = 0; i < cont_livros; i++) {
+					if (lista_livros[i].disponivel) {
+						cout << "\t[" << lista_livros[i].id << "] - ";
+						cout << lista_livros[i].titulo << endl;
+					}
 				}
+
 				do {
 					cout << "\nInforme o ID do livro: ";
 					cin >> escolha;
 
 					flag = false;
-					for (int i = 0; i < cont_livros + 1; i++) {
-						if (lista_livros[i].id == escolha) {
+					for (int i = 0; i < cont_livros; i++) {
+						if (lista_livros[i].id == escolha && lista_livros[i].disponivel) {
 							flag = true;
+							break;
 						}
 					}
+
+					if (!flag) {
+						set_color(4);
+						cout << "\nLivro indisponivel para retirada." << endl;
+						set_color(7);
+						system("pause");
+						system("cls");
+						break;
+					}
+
 					if (flag == false) {
 						set_color(4);
 						cout << "\nId de Livro nao foi encontrada, verifique se digitou o ID corretamente!" << endl;
@@ -1131,71 +1189,70 @@ int main()
 					}
 				} while (flag == false);
 
-				cout << "\nInforme seu ID de usuario: ";
-				cin >> usuario.id;
+				if (flag == true) {
+					cout << "\nInforme seu ID de usuario: ";
+					cin >> usuario.id;
 
-				cout << "\nEntre com a data de retirada:\n";
-				Data data = ler_data();
+					cout << "\nEntre com a data de retirada:\n";
+					data = ler_data();
 
-				/*if (data.dia == data_atual.dia && data.mes == data_atual.mes && data.ano == data_atual.ano) {
-						// Data válida, continuar com a operação
-				} else {
-				 cout << "Operação inválida: a data informada não é a data atual.\n";
-				} */
+					// Permitir a retirada do livro
+					soma = 0;
+					flag = false;
 
-				// Permitir a retirada do livro
-				soma = 0;
-				flag = false;
-				for (int i = 0; i < cont_usuario + 1; i++) {
-					if (lista_usuarios[i].id == usuario.id) {
-						flag = true;
+					for (int i = 0; i < cont_usuario; i++) {
+						if (lista_usuarios[i].id == usuario.id) {
+							flag = true;
 
-						if (atraso(lista_usuarios[i]) == false) {
-							soma = qtd_retiradas(lista_usuarios[i]);
-							lista_usuarios[i].retirados[soma].id = escolha;
+							if (atraso(lista_usuarios[i]) == false) {
+								soma = qtd_retiradas(lista_usuarios[i]);
+								lista_usuarios[i].retirados[soma].id = escolha;
 
-							lista_usuarios[i].retirados[soma].retirada.dia = data.dia;
-							lista_usuarios[i].retirados[soma].retirada.mes = data.mes;
-							lista_usuarios[i].retirados[soma].retirada.ano = data.ano;
-							lista_usuarios[i].retirados[soma].devolucao = data_devolucao(data);
+								lista_usuarios[i].retirados[soma].retirada = data;
+								lista_usuarios[i].retirados[soma].devolucao = data_devolucao(data);
 
-							for (int i = 0; i < cont_livros + 1; i++) {
-								if (lista_livros[i].id == escolha) {
-									lista_livros[i].disponivel = false; //passa a colocar o livro como indisponivel
+								for (int j = 0; j < cont_livros; j++) {
+									if (lista_livros[j].id == escolha) {
+										lista_livros[j].disponivel = false;
+										break;
+									}
 								}
-							}
 
-							set_color(2);
-							cout << "\nItem retirado com sucesso!" << endl;
-							set_color(7);
-							cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
-							cout << "\tData de devolucao: ";
-							mostrar_data(lista_usuarios[i].retirados[soma].devolucao);
-							cout << endl << endl;
+								set_color(2);
+								cout << "\nItem retirado com sucesso!" << endl;
+								set_color(7);
+								cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
+								cout << "\tData de devolucao: ";
+								mostrar_data(lista_usuarios[i].retirados[soma].devolucao);
+								cout << endl << endl;
+							}
+							else {
+								break;
+							}
 						}
-						else if (atraso(lista_usuarios[i])) {
-							break;
-						}
+					}
+
+					if (flag == false) {
+						set_color(4);
+						cout << "\nID de Usuario nao foi encontrado, verifique se ja realizou cadastro ou se digitou o ID corretamente!" << endl;
+						set_color(7);
 					}
 				}
 
-				if (flag == false) {
-					set_color(4);
-					cout << "\nID de Usuario nao foi encontrado, verifique se ja realizou cadastro ou se digitou o ID corretamente!" << endl;
-					set_color(7);
-				}
 				system("pause");
 				break;
 
-			case 2: // LISTA REVISTAS
+			case 2: // RETIRADA REVISTAS
 				system("cls");
 				set_color(5);
-				cout << "\nLista de Revistas (id e titulo): \n" << endl;
+				cout << "\nLista de Revistas Disponiveis (id e titulo): \n" << endl;
 				set_color(7);
 
 				for (int i = 0; i < cont_revistas + 1; i++) {
-					cout << "\t[" << lista_revistas[i].id << "] ";
-					cout << lista_revistas[i].titulo << endl;
+					if (lista_revistas[i].disponivel) {
+						cout << "\t[" << lista_revistas[i].id << "] ";
+						cout << lista_revistas[i].titulo << endl;
+					}
 				}
 				do {
 					cout << endl;
@@ -1204,61 +1261,73 @@ int main()
 
 					flag = false;
 					for (int i = 0; i < cont_revistas + 1; i++) {
-						if (lista_revistas[i].id == escolha) {
+						if (lista_revistas[i].id == escolha && lista_revistas[i].disponivel) {
 							flag = true;
+							break;
 						}
 					}
+					if (!flag) {
+						set_color(4);
+						cout << "\nRevista indisponivel para retirada." << endl;
+						set_color(7);
+						system("pause");
+						system("cls");
+						break;
+					}
+
 					if (flag == false) {
 						set_color(4);
-						cout << "\nID de Revista nao foi encontrado, verifique se digitou o ID corretamente!" << endl;
+						cout << "\nId de Revista nao foi encontrada, verifique se digitou o ID corretamente!" << endl;
 						set_color(7);
 					}
 				} while (flag == false);
 
-				cout << "\nInforme seu ID de usuario: ";
-				cin >> usuario.id;
+				if (flag == true) {
+					cout << "\nInforme seu ID de usuario: ";
+					cin >> usuario.id;
 
-				cout << "\nEntre com a data de retirada:\n";
-				data = ler_data();
+					cout << "\nEntre com a data de retirada:\n";
+					data = ler_data();
 
-				soma = 0;
-				flag = false;
-				for (int i = 0; i < cont_usuario + 1; i++) {
-					if (lista_usuarios[i].id == usuario.id) { //encontra na lista de usuarios cadastrados o usuario correspondente ao id informado
-						flag = true;
+					soma = 0;
+					flag = false;
+					for (int i = 0; i < cont_usuario + 1; i++) {
+						if (lista_usuarios[i].id == usuario.id) { //encontra na lista de usuarios cadastrados o usuario correspondente ao id informado
+							flag = true;
 
-						if (atraso(lista_usuarios[i]) == false) {
-							soma = qtd_retiradas(lista_usuarios[i]);
-							lista_usuarios[i].retirados[soma].id = escolha; //atualiza lista de retirados do usuario
+							if (atraso(lista_usuarios[i]) == false) {
+								soma = qtd_retiradas(lista_usuarios[i]);
+								lista_usuarios[i].retirados[soma].id = escolha; //atualiza lista de retirados do usuario
 
-							lista_usuarios[i].retirados[soma].retirada.dia = data.dia;
-							lista_usuarios[i].retirados[soma].retirada.mes = data.mes;
-							lista_usuarios[i].retirados[soma].retirada.ano = data.ano;
-							lista_usuarios[i].retirados[soma].devolucao = data_devolucao(data);
+								lista_usuarios[i].retirados[soma].retirada.dia = data.dia;
+								lista_usuarios[i].retirados[soma].retirada.mes = data.mes;
+								lista_usuarios[i].retirados[soma].retirada.ano = data.ano;
+								lista_usuarios[i].retirados[soma].devolucao = data_devolucao(data);
 
-							for (int i = 0; i < cont_revistas + 1; i++) {
-								if (lista_revistas[i].id == escolha) {
-									lista_revistas[i].disponivel = false; //passa a colocar o livro como indisponivel
+								for (int i = 0; i < cont_revistas + 1; i++) {
+									if (lista_revistas[i].id == escolha) {
+										lista_revistas[i].disponivel = false; //passa a colocar o livro como indisponivel
+									}
 								}
+								set_color(2);
+								cout << "\nItem retirado com sucesso!" << endl;
+								set_color(7);
+								cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
+								cout << "\tData de devolucao: ";
+								mostrar_data(lista_usuarios[i].retirados[soma].devolucao);
+								cout << endl << endl;
 							}
-							set_color(2);
-							cout << "\nItem retirado com sucesso!" << endl;
-							set_color(7);
-							cout << "\tVoce tem 7 dias para realizar a leitura do material" << endl;
-							cout << "\tData de devolucao: ";
-							mostrar_data(lista_usuarios[i].retirados[soma].devolucao);
-							cout << endl << endl;
-						}
-						else if (atraso(lista_usuarios[i])) {
-							break;
+							else if (atraso(lista_usuarios[i])) {
+								break;
+							}
 						}
 					}
-				}
 
-				if (flag == false) {
-					set_color(4);
-					cout << "\nID de Usuario nao foi encontrado, verifique se ja realizou cadastro ou se digitou a ID corretamente!" << endl;
-					set_color(7);
+					if (flag == false) {
+						set_color(4);
+						cout << "\nID de Usuario nao foi encontrado, verifique se ja realizou cadastro ou se digitou a ID corretamente!" << endl;
+						set_color(7);
+					}
 				}
 				system("pause");
 				break;
@@ -1448,12 +1517,28 @@ int main()
 				set_color(5);
 				cout << "\n - - - - - CADASTRE-SE - - - - -\n" << endl;
 				set_color(7);
+
+				usuario = cadastrar_usuario();
 				cont_usuario++;
-				lista_usuarios[cont_usuario] = cadastrar_usuario(id_usuario);
+
+				flag = false;
+				for (int i = 0; i <= cont_usuario; i++) {
+					if (lista_usuarios[i].nome == usuario.nome) { // verifica se o usuário já está cadastrado
+						cout << "\nUsuario ja cadastrado." << endl;
+						cont_usuario--;
+						flag = true;
+						break;
+					}
+				}
+				if (!flag) {
+					lista_usuarios[cont_usuario].nome = usuario.nome;
+					lista_usuarios[cont_usuario].id = id_usuario;
+					cout << "Seu ID de usuario eh: " << lista_usuarios[cont_usuario].id;
+					id_usuario++;
+				}
 				set_color(2);
-				cout << "\n\nCadastro realizado com sucesso!\n" << endl;
+				cout << "\nUsuario cadastrado com sucesso!" << endl;
 				set_color(7);
-				id_usuario++;
 				system("pause");
 				system("cls");
 				break;
