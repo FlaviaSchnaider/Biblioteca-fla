@@ -77,11 +77,11 @@ int opcao_invalida(string frase, int min, int max) {
 	do {
 		set_color(5);
 		cout << frase << "Digite uma opcao de menu (" << min << " - " << max << "): ";
-
 		cin >> op;
 		if (op < min || op > max) {
 			set_color(4);
 			cout << "\nOpcao invalida. Tente novamente.\n" << endl;
+			system("cls");
 			Sleep(500);
 			set_color(7);
 		}
@@ -634,7 +634,8 @@ bool livro_disponivel(Livro livro) {
 
 #pragma region Menu
 void exibir_menu_principal() {
-	cout << "\n[1] - Cadastro" << endl
+	set_color(7);
+		cout << "\n\n[1] - Cadastro" << endl
 		<< "[2] - Alteracao" << endl
 		<< "[3] - Retirada" << endl
 		<< "[4] - Consultar Acervo" << endl
@@ -788,8 +789,6 @@ int main()
 		cout << "\n- - - - - - - - BIBLIOTECA - - - - - - - - -" << endl;
 		cout << "\t\t";
 		mostrar_data(data_atual);
-		set_color(7);
-		cout << endl;
 		exibir_menu_principal();
 		set_color(5);
 		escolha_menu_principal = opcao_invalida("\n", 0, 5);
