@@ -75,7 +75,9 @@ int opcao_invalida(string frase, int min, int max) {
 	int op;
 
 	do {
+		set_color(5);
 		cout << frase << "Digite uma opcao de menu (" << min << " - " << max << "): ";
+
 		cin >> op;
 		if (op < min || op > max) {
 			set_color(4);
@@ -799,6 +801,7 @@ int main()
 		case 0: // fecha o programa
 			cout << "Volte sempre! " << endl;
 			set_color(7);
+			return 0;
 			break;
 
 		case 1: // cadastro de material
