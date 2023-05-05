@@ -1609,54 +1609,59 @@ int main()
 
 					switch (escolha_submenu) {
 					case 1:
-						int livro;
-						flag = false; // encontrado ou nao
+						int livro_id;
+						flag = false;
 						cout << "\nInforme o ID do livro a ser devolvido: ";
-						cin >> livro;
+						cin >> livro_id;
 
 						int usuario = -1;
 						int retirado = -1;
 						for (int i = 0; i < cont_usuario; i++) {
 							for (int j = 0; j < MAX_RETIRADOS; j++) {
-								if (lista_usuarios[i].retirados[j].id == livro) {
-									Data data_atual = ler_data();
+								if (lista_usuarios[i].retirados[j].id == livro_id) {
 									usuario = i;
 									retirado = j;
-									flag = true;
+									Data data_atual = ler_data();
+									if (atraso) {
+										set_color(4);
+										cout << "Livro em atraso\n";
+										set_color(7);
+
+										lista_usuarios[usuario].retirados[retirado].id = 0;
+
+										set_color(2);
+										cout << "\nItem devolvido com atraso!" << endl;
+										set_color(7);
+
+										system("pause");
+										flag = true;
+										break;
+									}
+								}
+								if (flag) {
 									break;
 								}
-							}
-							if (!flag) {
-								break;
-							}
-						}
 
-						if (!flag) {
-							set_color(4);
-							cout << "\nID do livro invalido!" << endl;
-							set_color(7);
-							system("pause");
-							break;
-						}
+								// Atualiza livros disponíveis
+								if (!flag) {
+									for (int k = 0; k < cont_livros; k++) {
+										if (lista_livros[k].id == livro_id) {
+											lista_livros[k].disponivel = true;
+											break;
+										}
+									}
 
-						if (atraso(lista_usuarios[usuario])) {
-							system("pause");
-							break;
-						}
+									lista_usuarios[usuario].retirados[retirado].id = 0;
 
-						// Atualiza livros disponíveis
-						for (int k = 0; k < cont_livros; k++) {
-							if (lista_livros[k].id == livro) {
-								lista_livros[k].disponivel = true;
-								break;
+									set_color(2);
+									cout << "\nItem devolvido com sucesso!" << endl;
+									set_color(7);
+
+									system("pause");
+									system("cls");
+								}
 							}
 						}
-						lista_usuarios[usuario].retirados[retirado].id = 0;
-
-						set_color(2);
-						cout << "\nItem devolvido com sucesso!" << endl;
-						set_color(7);
-						system("pause");
 					}
 					system("cls");
 					break;
