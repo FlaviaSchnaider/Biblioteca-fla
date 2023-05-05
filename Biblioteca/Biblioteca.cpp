@@ -243,7 +243,7 @@ Data data_devolucao(Data data_retirada) {
 //calcula os dias passados entre duas datas
 int dias_passados(Data retirada, Data data) {
 	int dias = 0;
-	while (data.dia != retirada.dia || data.mes != retirada.mes) {
+	do {
 		if (data.dia > 1) {
 			data.dia--;
 			dias++;
@@ -251,6 +251,7 @@ int dias_passados(Data retirada, Data data) {
 		else if (data.dia == 1) {
 			dias++;
 			data.mes--;
+
 			data.dia = dias_no_mes(data.mes, data.ano);
 		}
 		else if (data.mes > 1) {
@@ -262,7 +263,7 @@ int dias_passados(Data retirada, Data data) {
 			data.mes = 12;
 			data.dia = dias_no_mes(data.mes, data.ano);
 		}
-	}
+	} while (data.dia != retirada.dia || data.mes != retirada.mes);
 	return dias;
 }
 
@@ -1607,24 +1608,26 @@ int main()
 					cout << "- - - - - USUARIOS COM ATRASO DE DEVOLUCAO - - - - -\n" << endl;
 					set_color(7);
 
-					for (int i = 0; i < cont_usuario + 1; i++) {
-						if (atraso(lista_usuarios[i])) {
-							cout << "ID: " << lista_usuarios[i].id << endl;
+					flag = false;
 
-							cout << "\nLivros emprestados em atraso: " << endl;
-							for (int j = 0; j < qtd_retiradas(lista_usuarios[i]); j++) {
-								for (int k = 0; k < cont_livros; k++) {
-									if (lista_usuarios[i].retirados[j].id == lista_livros[k].id) { // mostra livros emprestados em atraso
-										mostrar_livro(lista_livros[k]);
-										cout << "\tData de devolucao: ";
-										mostrar_data(lista_usuarios[i].retirados[j].devolucao);
-										cout << endl;
+					for (int i = 0; i < cont_usuario; i++) {
+						for (int j = 0; j < MAX_RETIRADOS; j++) {
+							if (lista_usuarios[i].retirados[j].id != 0) {
+								if (atraso) {
+									if (!atraso) {
+										cout << "Livros em atraso:" << endl;
+										flag = true;
 									}
+									cout << lista_livros[lista_usuarios[i].retirados[j].id - 1].titulo << endl;
 								}
 							}
-							cout << endl;
 						}
 					}
+					if (!flag) {
+						cout << "Nenhum livro em atraso." << endl;
+					}
+					cout << endl;
+					system("pause");
 					system("cls");
 					break;
 
@@ -1702,9 +1705,9 @@ int main()
 						system("cls");
 
 					}
-					if (escolha_submenu == 2){
+					if (escolha_submenu == 2) {
 						int revista_id;
-						
+
 						flag = false;
 						cout << "\nInforme o ID da revista a ser devolvido: ";
 						cin >> revista_id;
