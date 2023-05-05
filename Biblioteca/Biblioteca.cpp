@@ -1599,11 +1599,11 @@ int main()
 				case 3:
 					system("cls");
 					set_color(6);
-					cout << "- - - - - - - - - - - - - DEVOLUCAO - - - - - - - - - - - - - \n" << endl
-						<< "[1] - Devolver livro\t"
+					cout << "- - - - - - - - - - - - - DEVOLUCAO - - - - - - - - - - - - - \n" << endl;
+					set_color(7);
+					cout << "[1] - Devolver livro\t"
 						<< "[2] - Devolver revista\t"
 						<< "  [0] - Sair\n";
-					set_color(7);
 					cin >> escolha_submenu;
 					system("cls");
 
@@ -1613,6 +1613,14 @@ int main()
 						flag = false;
 						cout << "\nInforme o ID do livro a ser devolvido: ";
 						cin >> livro_id;
+
+						if (flag) {
+							set_color(4);
+							cout << "\nLivro nao encontrado em sua lista de retirados!" << endl;
+							set_color(7);
+							system("pause");
+							break;
+						}
 
 						int usuario = -1;
 						int retirado = -1;
@@ -1624,12 +1632,6 @@ int main()
 									Data data_atual = ler_data();
 									if (atraso) {
 										set_color(4);
-										cout << "Livro em atraso\n";
-										set_color(7);
-
-										lista_usuarios[usuario].retirados[retirado].id = 0;
-
-										set_color(2);
 										cout << "\nItem devolvido com atraso!" << endl;
 										set_color(7);
 
@@ -1638,29 +1640,31 @@ int main()
 										break;
 									}
 								}
-								if (flag) {
+							}
+						}
+						if (flag) {
+							for (int k = 0; k < cont_livros; k++) {
+								if (lista_livros[k].id == livro_id) {
+									lista_livros[k].disponivel = true;
 									break;
 								}
-
-								// Atualiza livros disponíveis
-								if (!flag) {
-									for (int k = 0; k < cont_livros; k++) {
-										if (lista_livros[k].id == livro_id) {
-											lista_livros[k].disponivel = true;
-											break;
-										}
-									}
-
-									lista_usuarios[usuario].retirados[retirado].id = 0;
-
-									set_color(2);
-									cout << "\nItem devolvido com sucesso!" << endl;
-									set_color(7);
-
-									system("pause");
-									system("cls");
+							}
+						}
+						// Atualiza livros disponíveis
+						if (!flag) {
+							for (int k = 0; k < cont_livros; k++) {
+								if (lista_livros[k].id == livro_id) {
+									lista_livros[k].disponivel = true;
+									break;
 								}
 							}
+
+							lista_usuarios[usuario].retirados[retirado].id = 0;
+
+							set_color(2);
+							cout << "\nItem devolvido com sucesso!" << endl;
+							set_color(7);
+							system("pause");
 						}
 					}
 					system("cls");
