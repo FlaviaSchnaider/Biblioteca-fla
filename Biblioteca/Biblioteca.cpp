@@ -243,7 +243,7 @@ Data data_devolucao(Data data_retirada) {
 //calcula os dias passados entre duas datas
 int dias_passados(Data retirada, Data data) {
 	int dias = 0;
-	do {
+	while (data.dia != retirada.dia || data.mes != retirada.mes) {
 		if (data.dia > 1) {
 			data.dia--;
 			dias++;
@@ -253,7 +253,16 @@ int dias_passados(Data retirada, Data data) {
 			data.mes--;
 			data.dia = dias_no_mes(data.mes, data.ano);
 		}
-	} while (data.dia != retirada.dia && data.mes != retirada.mes);
+		else if (data.mes > 1) {
+			data.mes--;
+			data.dia = dias_no_mes(data.mes, data.ano);
+		}
+		else {
+			data.ano--;
+			data.mes = 12;
+			data.dia = dias_no_mes(data.mes, data.ano);
+		}
+	}
 	return dias;
 }
 
@@ -1336,6 +1345,7 @@ int main()
 								lista_usuarios[i].retirados[soma].retirada = data;
 								lista_usuarios[i].retirados[soma].devolucao = data_devolucao(data);
 
+
 								cout << "Dias passados: " << dias_passados(data, data_atual);
 								if (dias_passados(data, data_atual) > 7) {
 									lista_usuarios[i].retirados[soma].atraso = true;
@@ -1344,6 +1354,7 @@ int main()
 								for (int i = 0; i < cont_revistas + 1; i++) {
 									if (lista_revistas[i].id == escolha) {
 										lista_revistas[i].disponivel = false; //passa a colocar o livro como indisponivel
+										break;
 									}
 								}
 								set_color(2);
@@ -1656,8 +1667,8 @@ int main()
 										set_color(4);
 										cout << "\nItem devolvido com atraso!" << endl;
 										set_color(7);
-
 										system("pause");
+										system("cls");
 										flag = true;
 										break;
 									}
