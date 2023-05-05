@@ -240,6 +240,23 @@ Data data_devolucao(Data data_retirada) {
 	return data_devolucao;
 }
 
+//calcula os dias passados entre duas datas
+int dias_passados(Data retirada, Data data) {
+	int dias = 0;
+	do {
+		if (data.dia > 1) {
+			data.dia--;
+			dias++;
+		}
+		else if (data.dia == 1) {
+			dias++;
+			data.mes--;
+			data.dia = dias_no_mes(data.mes, data.ano);
+		}
+	} while (data.dia != retirada.dia && data.mes != retirada.mes);
+	return dias;
+}
+
 Autor ler_autor() {
 	Autor autor;
 	cout << "Nome do Autor: ";
@@ -1217,16 +1234,19 @@ int main()
 					soma = 0;
 					flag = false;
 
-					for (int i = 0; i < cont_usuario; i++) {
+					for (int i = 0; i < cont_usuario + 1; i++) {
 						if (lista_usuarios[i].id == usuario.id) {
 							flag = true;
 
 							if (atraso(lista_usuarios[i]) == false) {
 								soma = qtd_retiradas(lista_usuarios[i]);
 								lista_usuarios[i].retirados[soma].id = escolha;
-
 								lista_usuarios[i].retirados[soma].retirada = data;
 								lista_usuarios[i].retirados[soma].devolucao = data_devolucao(data);
+
+								if (dias_passados(data, data_atual) > 7) {
+									lista_usuarios[i].retirados[soma].atraso = true;
+								}
 
 								for (int j = 0; j < cont_livros; j++) {
 									if (lista_livros[j].id == escolha) {
@@ -1298,7 +1318,7 @@ int main()
 						}
 					} while (flag == false);
 
-					cout << "\nEntre com a data de retirada:\n";
+					cout << "\nEntre com a data de retirada:";
 					data = ler_data();
 
 					cout << "\nInforme seu ID de usuario: ";
@@ -1313,11 +1333,13 @@ int main()
 							if (atraso(lista_usuarios[i]) == false) {
 								soma = qtd_retiradas(lista_usuarios[i]);
 								lista_usuarios[i].retirados[soma].id = escolha; //atualiza lista de retirados do usuario
-
-								lista_usuarios[i].retirados[soma].retirada.dia = data.dia;
-								lista_usuarios[i].retirados[soma].retirada.mes = data.mes;
-								lista_usuarios[i].retirados[soma].retirada.ano = data.ano;
+								lista_usuarios[i].retirados[soma].retirada = data;
 								lista_usuarios[i].retirados[soma].devolucao = data_devolucao(data);
+
+								cout << "Dias passados: " << dias_passados(data, data_atual);
+								if (dias_passados(data, data_atual) > 7) {
+									lista_usuarios[i].retirados[soma].atraso = true;
+								}
 
 								for (int i = 0; i < cont_revistas + 1; i++) {
 									if (lista_revistas[i].id == escolha) {
@@ -1574,7 +1596,6 @@ int main()
 					cout << "- - - - - USUARIOS COM ATRASO DE DEVOLUCAO - - - - -\n" << endl;
 					set_color(7);
 
-
 					for (int i = 0; i < cont_usuario + 1; i++) {
 						if (atraso(lista_usuarios[i])) {
 							cout << "ID: " << lista_usuarios[i].id << endl;
@@ -1607,9 +1628,11 @@ int main()
 					cin >> escolha_submenu;
 					system("cls");
 
-					switch (escolha_submenu) {
-					case 1:
+					if (escolha_submenu == 1) {
+
 						int livro_id;
+						int usuario = -1;
+						int retirado = -1;
 						flag = false;
 						cout << "\nInforme o ID do livro a ser devolvido: ";
 						cin >> livro_id;
@@ -1622,8 +1645,7 @@ int main()
 							break;
 						}
 
-						int usuario = -1;
-						int retirado = -1;
+
 						for (int i = 0; i < cont_usuario; i++) {
 							for (int j = 0; j < MAX_RETIRADOS; j++) {
 								if (lista_usuarios[i].retirados[j].id == livro_id) {
@@ -1642,7 +1664,6 @@ int main()
 								}
 							}
 						}
-						// Atualiza livros disponíveis caso estejam atrasados ou nao
 						if (flag) {
 							for (int k = 0; k < cont_livros; k++) {
 								if (lista_livros[k].id == livro_id) {
@@ -1651,7 +1672,7 @@ int main()
 								}
 							}
 						}
-						
+						// Atualiza livros disponíveis
 						if (!flag) {
 							for (int k = 0; k < cont_livros; k++) {
 								if (lista_livros[k].id == livro_id) {
@@ -1667,8 +1688,74 @@ int main()
 							set_color(7);
 							system("pause");
 						}
+						system("cls");
+
 					}
-					system("cls");
+					if (escolha_submenu == 2){
+						int revista_id;
+						
+						flag = false;
+						cout << "\nInforme o ID da revista a ser devolvido: ";
+						cin >> revista_id;
+
+						if (flag) {
+							set_color(4);
+							cout << "\Revista nao encontrada em sua lista de retirados!" << endl;
+							set_color(7);
+							system("pause");
+							break;
+						}
+
+						int usuario = -1;
+						int retirado = -1;
+
+						for (int i = 0; i < cont_usuario; i++) {
+							for (int j = 0; j < MAX_RETIRADOS; j++) {
+								if (lista_usuarios[i].retirados[j].id == revista_id) {
+									usuario = i;
+									retirado = j;
+									Data data_atual = ler_data();
+									if (atraso) {
+										set_color(4);
+										cout << "\nItem devolvido com atraso!" << endl;
+										set_color(7);
+
+										system("pause");
+										system("cls");
+										flag = true;
+										break;
+									}
+								}
+							}
+						}
+						if (flag) {
+							for (int k = 0; k < cont_revistas; k++) {
+								if (lista_revistas[k].id == revista_id) {
+									lista_revistas[k].disponivel = true;
+									break;
+								}
+							}
+						}
+						// Atualiza livros disponíveis
+						if (!flag) {
+							for (int k = 0; k < cont_revistas; k++) {
+								if (lista_revistas[k].id == revista_id) {
+									lista_revistas[k].disponivel = true;
+									break;
+								}
+							}
+
+							lista_usuarios[usuario].retirados[retirado].id = 0;
+
+							set_color(2);
+							cout << "\nItem devolvido com sucesso!" << endl;
+							set_color(7);
+							system("pause");
+						}
+						break;
+						system("cls");
+
+					}
 					break;
 
 				case 4:
@@ -1720,7 +1807,6 @@ int main()
 					system("pause");
 					system("cls");
 					break;
-
 
 				case 5: // Listagem de Usuarios
 					system("cls");
