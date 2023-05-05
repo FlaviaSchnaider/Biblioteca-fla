@@ -243,7 +243,7 @@ Data data_devolucao(Data data_retirada) {
 //calcula os dias passados entre duas datas
 int dias_passados(Data retirada, Data data) {
 	int dias = 0;
-	do {
+	while (data.dia != retirada.dia || data.mes != retirada.mes) {
 		if (data.dia > 1) {
 			data.dia--;
 			dias++;
@@ -251,7 +251,6 @@ int dias_passados(Data retirada, Data data) {
 		else if (data.dia == 1) {
 			dias++;
 			data.mes--;
-
 			data.dia = dias_no_mes(data.mes, data.ano);
 		}
 		else if (data.mes > 1) {
@@ -263,7 +262,7 @@ int dias_passados(Data retirada, Data data) {
 			data.mes = 12;
 			data.dia = dias_no_mes(data.mes, data.ano);
 		}
-	} while (data.dia != retirada.dia || data.mes != retirada.mes);
+	}
 	return dias;
 }
 
@@ -1609,16 +1608,17 @@ int main()
 					set_color(7);
 
 					flag = false;
-
 					for (int i = 0; i < cont_usuario; i++) {
 						for (int j = 0; j < MAX_RETIRADOS; j++) {
 							if (lista_usuarios[i].retirados[j].id != 0) {
+								int livro_id = lista_usuarios[i].retirados[j].id;
 								if (atraso) {
-									if (!atraso) {
+									if (!flag) {
 										cout << "Livros em atraso:" << endl;
 										flag = true;
+										mostrar_livro(lista_livros[j]);
+										cout << lista_livros[livro_id].titulo << endl;
 									}
-									cout << lista_livros[lista_usuarios[i].retirados[j].id - 1].titulo << endl;
 								}
 							}
 						}
