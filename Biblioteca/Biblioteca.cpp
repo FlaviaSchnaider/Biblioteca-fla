@@ -1642,6 +1642,7 @@ int main()
 								}
 							}
 						}
+						// Atualiza livros disponíveis caso estejam atrasados ou nao
 						if (flag) {
 							for (int k = 0; k < cont_livros; k++) {
 								if (lista_livros[k].id == livro_id) {
@@ -1650,7 +1651,7 @@ int main()
 								}
 							}
 						}
-						// Atualiza livros disponíveis
+						
 						if (!flag) {
 							for (int k = 0; k < cont_livros; k++) {
 								if (lista_livros[k].id == livro_id) {
